@@ -3,10 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { 
-  Mail, 
-  MapPin, 
-  Phone, 
+import { projectInfo } from "@/lib/data";
+import {
+  Mail,
+  MapPin,
+  Phone,
   ExternalLink,
   Linkedin,
   Twitter,
@@ -15,18 +16,19 @@ import {
 
 const quickLinks = [
   { href: "#inicio", label: "Inicio" },
-  { href: "#procesos", label: "Procesos" },
-  { href: "#analytics", label: "Analytics" },
-  { href: "#experimento", label: "Experimento" },
-  { href: "#cronologia", label: "Cronología" },
-  { href: "#galeria", label: "Galería" },
+  { href: "#grupos", label: "Grupos" },
+  { href: "#analytics", label: "Resultados" },
+  { href: "#experimento", label: "Metodología" },
+  { href: "#cronologia", label: "Bitácora" },
+  { href: "#evidencia", label: "Galería" },
+  { href: "#galeria", label: "Percepción" },
 ];
 
 const resources = [
-  { href: "#", label: "Documentación" },
-  { href: "#", label: "Publicaciones" },
-  { href: "#", label: "Metodología" },
-  { href: "#", label: "Datos Abiertos" },
+  { href: "#experimento", label: "Marco Teórico" },
+  { href: "#analytics", label: "Prueba T de Student" },
+  { href: "#galeria", label: "Conclusiones" },
+  { href: "#cronologia", label: "Bitácora" },
 ];
 
 export function Footer() {
@@ -42,20 +44,20 @@ export function Footer() {
           >
             <Link href="#inicio" className="flex items-center gap-3 mb-4">
               <Image
-                src="/images/logo.jpeg"
-                alt="BioGrow Partners Logo"
+                src={projectInfo.logoSrc}
+                alt={`${projectInfo.brandName} Logo`}
                 width={48}
                 height={48}
-                className="rounded-lg"
+                className="rounded-lg object-cover object-top h-12 w-12"
               />
               <div>
-                <p className="font-semibold text-card-foreground">BioGrow Partners</p>
-                <p className="text-xs text-muted-foreground">Sustainable Cultivation</p>
+                <p className="font-semibold text-card-foreground">{projectInfo.brandName}</p>
+                <p className="text-xs text-muted-foreground">Phaseolus vulgaris · UMG 2026</p>
               </div>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Investigación avanzada en procesos de germinación y cultivo sostenible.
-              Soluciones innovadoras para la agricultura del futuro.
+              Proyecto final de Metodología de la Investigación sobre el efecto del riego con
+              agua azucarada en la germinación del frijol. Villa Nueva, Guatemala.
             </p>
 
             {/* Social Links */}
@@ -138,27 +140,21 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                 <span className="text-sm text-muted-foreground">
-                  Centro de Investigación Agrícola<br />
-                  Campus Universitario, Edificio B
+                  Universidad Mariano Gálvez de Guatemala<br />
+                  Facultad de Ciencias y Tecnología · Villa Nueva
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-primary shrink-0" />
-                <a
-                  href="mailto:contacto@biogrow.partners"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  contacto@biogrow.partners
-                </a>
+                <span className="text-sm text-muted-foreground">
+                  Metodología de la Investigación
+                </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 text-primary shrink-0" />
-                <a
-                  href="tel:+34912345678"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  +34 912 345 678
-                </a>
+                <span className="text-sm text-muted-foreground">
+                  Proyecto Final · Mayo 2026
+                </span>
               </li>
             </ul>
           </motion.div>
@@ -167,7 +163,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} BioGrow Partners. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()} Proyecto de Investigación — Phaseolus vulgaris. UMG, Villa Nueva.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
             <Link href="#" className="hover:text-primary transition-colors">

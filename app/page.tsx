@@ -4,6 +4,7 @@ import { GerminationProcesses } from "@/components/germination-processes";
 import { AnalyticsDashboard } from "@/components/analytics-dashboard";
 import { ExperimentInfo } from "@/components/experiment-info";
 import { Timeline } from "@/components/timeline";
+import { ExperimentGallery } from "@/components/experiment-gallery";
 import { Gallery } from "@/components/gallery";
 import { Footer } from "@/components/footer";
 
@@ -16,6 +17,7 @@ export default function HomePage() {
       <AnalyticsDashboard />
       <ExperimentInfo />
       <Timeline />
+      <ExperimentGallery />
       <Gallery />
       <Footer />
     </main>

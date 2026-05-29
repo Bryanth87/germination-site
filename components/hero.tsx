@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Sprout, BarChart3, FlaskConical } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { projectInfo } from "@/lib/data";
 
 export function Hero() {
   return (
@@ -11,49 +12,58 @@ export function Hero() {
       id="inicio"
       className="relative min-h-screen pt-16 flex items-center overflow-hidden"
     >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-background to-background" />
-      
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Content */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_60%,oklch(0.40_0.12_145/0.05))]" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 w-full">
+        <div className="grid lg:grid-cols-[1fr_minmax(280px,420px)] gap-10 lg:gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
+            className="order-2 lg:order-1"
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm mb-6">
               <FlaskConical className="h-4 w-4" />
-              <span>Investigación en Tiempo Real</span>
+              <span>{projectInfo.university}</span>
             </div>
-            
+
+            <p className="text-sm font-semibold tracking-wide text-primary uppercase mb-2">
+              {projectInfo.brandName}
+            </p>
+
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight text-balance">
-              Procesos de{" "}
-              <span className="text-primary">Germinación</span>
+              Efecto del Riego con{" "}
+              <span className="text-primary">Agua Azucarada</span>
             </h1>
-            
+
             <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed text-pretty">
-              Soluciones de Cultivo Sostenible - Monitoreo y análisis en tiempo real de 
-              ciclos de crecimiento vegetal con tecnología de sensores avanzada.
+              {projectInfo.subtitle}
+              <span className="italic"> (Phaseolus vulgaris)</span>. Experimento comparativo
+              de {projectInfo.durationDays} días con {projectInfo.totalSeeds} semillas en{" "}
+              {projectInfo.location}.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                <Sprout className="mr-2 h-5 w-5" />
-                Ver Procesos
-              </Button>
-              <Button size="lg" variant="outline" className="border-primary/30 hover:bg-primary/5">
-                <BarChart3 className="mr-2 h-5 w-5" />
-                Panel de Datos
-              </Button>
+              <a href="#grupos">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                  <Sprout className="mr-2 h-5 w-5" />
+                  Ver Resultados
+                </Button>
+              </a>
+              <a href="#analytics">
+                <Button size="lg" variant="outline" className="border-primary/30 hover:bg-primary/5">
+                  <BarChart3 className="mr-2 h-5 w-5" />
+                  Panel de Datos
+                </Button>
+              </a>
             </div>
 
-            {/* Quick Stats */}
             <div className="mt-12 grid grid-cols-3 gap-6">
               {[
-                { value: "12", label: "Procesos Totales" },
-                { value: "94.5%", label: "Tasa de Éxito" },
-                { value: "18.5d", label: "Tiempo Promedio" },
+                { value: "40", label: "Semillas (2 grupos)" },
+                { value: "30% vs 0%", label: "Tasa de Germinación" },
+                { value: "100%", label: "Inhibición con Azúcar" },
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}
@@ -69,58 +79,26 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Image */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="order-1 lg:order-2 relative mx-auto w-full max-w-[420px]"
           >
-            <div className="relative aspect-square max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-3xl" />
+            <div className="absolute -inset-4 bg-gradient-to-b from-primary/15 via-secondary/10 to-transparent rounded-3xl blur-2xl" />
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border/60 bg-card">
               <Image
-                src="/images/logo.jpeg"
-                alt="BioGrow Partners - Sistema de monitoreo de germinación"
-                fill
-                className="object-cover rounded-3xl shadow-2xl"
+                src={projectInfo.logoSrc}
+                alt={`${projectInfo.brandName} — ${projectInfo.brandTagline}`}
+                width={1024}
+                height={1536}
+                className="w-full h-auto object-contain"
                 priority
               />
             </div>
-            
-            {/* Floating Cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="absolute -bottom-4 -left-4 bg-card p-4 rounded-xl shadow-lg border border-border"
-            >
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-secondary/20 flex items-center justify-center">
-                  <Sprout className="h-5 w-5 text-secondary" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-card-foreground">Crecimiento Óptimo</p>
-                  <p className="text-xs text-muted-foreground">+23% esta semana</p>
-                </div>
-              </div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="absolute -top-4 -right-4 bg-card p-4 rounded-xl shadow-lg border border-border"
-            >
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
-                  <BarChart3 className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-card-foreground">Eficiencia</p>
-                  <p className="text-xs text-muted-foreground">92% Fotosíntesis</p>
-                </div>
-              </div>
-            </motion.div>
+            <p className="mt-4 text-center text-xs text-muted-foreground">
+              {projectInfo.brandTagline}
+            </p>
           </motion.div>
         </div>
       </div>

@@ -36,10 +36,11 @@ export function Timeline() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
-            Cronología del <span className="text-primary">Experimento</span>
+            Bitácora de <span className="text-primary">Observación</span>
           </h2>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Hitos importantes y progreso del proyecto de investigación.
+            Registro cronológico de ambos grupos del 22 de abril al 18 de mayo de 2026,
+            con los puntos de quiebre observados día a día.
           </p>
         </motion.div>
 
@@ -67,7 +68,8 @@ export function Timeline() {
                     <div className={`flex items-center gap-2 mb-2 ${index % 2 === 0 ? "md:justify-end" : ""}`}>
                       <Calendar className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm text-muted-foreground">
-                        {new Date(event.date).toLocaleDateString("es-ES", {
+                        {event.day} ·{" "}
+                        {new Date(`${event.date}T12:00:00`).toLocaleDateString("es-ES", {
                           day: "numeric",
                           month: "long",
                           year: "numeric",
@@ -75,7 +77,16 @@ export function Timeline() {
                       </span>
                     </div>
                     <h3 className="font-semibold text-card-foreground">{event.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{event.description}</p>
+                    <div className={`mt-3 space-y-2 text-left ${index % 2 === 0 ? "md:text-left" : ""}`}>
+                      <div className="p-2 rounded-lg bg-primary/5 border-l-2 border-primary">
+                        <p className="text-[11px] font-medium text-primary uppercase tracking-wide">Control · Agua pura</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{event.control}</p>
+                      </div>
+                      <div className="p-2 rounded-lg bg-destructive/5 border-l-2 border-destructive">
+                        <p className="text-[11px] font-medium text-destructive uppercase tracking-wide">Experimental · Sacarosa</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{event.experimental}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -104,7 +115,7 @@ export function Timeline() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
               </span>
-              <span className="text-sm font-medium text-secondary-foreground">Experimento en progreso</span>
+              <span className="text-sm font-medium text-secondary-foreground">Experimento finalizado · 26 días</span>
             </div>
           </motion.div>
         </div>

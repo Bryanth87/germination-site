@@ -9,25 +9,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'BioGrow Partners - Sustainable Cultivation Solutions',
-  description: 'Research project focused on germination processes and sustainable cultivation. Real-time monitoring and analysis of plant growth cycles.',
+  title: 'Efecto del Riego con Agua Azucarada en el Frijol (Phaseolus vulgaris)',
+  description: 'Proyecto de investigación de la Universidad Mariano Gálvez (Villa Nueva, 2026) sobre el efecto del riego con agua azucarada en la germinación y desarrollo inicial de semillas de frijol.',
   generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/images/logo-oficial-proyecto.png',
+    apple: '/images/logo-oficial-proyecto.png',
   },
 }
 

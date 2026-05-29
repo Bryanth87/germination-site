@@ -6,14 +6,16 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { projectInfo } from "@/lib/data";
 
 const navLinks = [
   { href: "#inicio", label: "Inicio" },
-  { href: "#procesos", label: "Procesos" },
-  { href: "#analytics", label: "Analytics" },
-  { href: "#experimento", label: "Experimento" },
-  { href: "#cronologia", label: "Cronología" },
-  { href: "#galeria", label: "Galería" },
+  { href: "#grupos", label: "Grupos" },
+  { href: "#analytics", label: "Resultados" },
+  { href: "#experimento", label: "Metodología" },
+  { href: "#cronologia", label: "Bitácora" },
+  { href: "#evidencia", label: "Galería" },
+  { href: "#galeria", label: "Percepción" },
 ];
 
 export function Navbar() {
@@ -32,15 +34,15 @@ export function Navbar() {
           {/* Logo */}
           <Link href="#inicio" className="flex items-center gap-3">
             <Image
-              src="/images/logo.jpeg"
-              alt="BioGrow Partners Logo"
+              src={projectInfo.logoSrc}
+              alt={`${projectInfo.brandName} Logo`}
               width={40}
               height={40}
-              className="rounded-lg"
+              className="rounded-lg object-cover object-top h-10 w-10"
             />
             <div className="hidden sm:block">
-              <p className="font-semibold text-foreground text-sm">BioGrow Partners</p>
-              <p className="text-xs text-muted-foreground">Sustainable Cultivation</p>
+              <p className="font-semibold text-foreground text-sm">{projectInfo.brandName}</p>
+              <p className="text-xs text-muted-foreground">Phaseolus vulgaris · UMG 2026</p>
             </div>
           </Link>
 

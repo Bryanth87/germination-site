@@ -3,16 +3,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Thermometer,
+  Sprout,
   Droplets,
-  Leaf,
-  Sun,
-  TrendingUp,
-  Filter,
-  Plus,
+  Ruler,
+  Bug,
   ChevronDown,
   ChevronUp,
-  Calendar,
+  FlaskConical,
 } from "lucide-react";
 import {
   LineChart,
@@ -22,32 +19,22 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  germinationProcesses,
-  phaseColors,
-  statusColors,
-  type GerminationProcess,
+  experimentGroups,
+  growthEvolution,
+  moldProgression,
+  type ExperimentGroup,
 } from "@/lib/data";
 
-const phases = ["todas", "preparación", "germinación", "crecimiento", "maduración", "cosecha"] as const;
-const statuses = ["todos", "activo", "pausado", "completado"] as const;
-
 export function GerminationProcesses() {
-  const [phaseFilter, setPhaseFilter] = useState<string>("todas");
-  const [statusFilter, setStatusFilter] = useState<string>("todos");
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-
-  const filteredProcesses = germinationProcesses.filter((process) => {
-    const phaseMatch = phaseFilter === "todas" || process.phase === phaseFilter;
-    const statusMatch = statusFilter === "todos" || process.status === statusFilter;
-    return phaseMatch && statusMatch;
-  });
+  const [expandedId, setExpandedId] = useState<string | null>("control");
 
   return (
-    <section id="procesos" className="py-20 bg-muted/30">
+    <section id="grupos" className="py-20 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -57,113 +44,73 @@ export function GerminationProcesses() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
-            Procesos de <span className="text-primary">Germinación</span>
+            Grupos del <span className="text-primary">Experimento</span>
           </h2>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Monitoreo en tiempo real de todos los procesos de cultivo activos. 
-            Cada proceso incluye métricas detalladas y visualizaciones de datos.
+            Dos grupos paralelos de 20 semillas cada uno. La única variable manipulada
+            fue el tipo de riego: agua pura frente a solución saturada de sacarosa.
           </p>
         </motion.div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Filter className="h-4 w-4" />
-              <span>Filtrar:</span>
-            </div>
-            
-            {/* Phase Filter */}
-            <div className="flex flex-wrap gap-1">
-              {phases.map((phase) => (
-                <Button
-                  key={phase}
-                  variant={phaseFilter === phase ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setPhaseFilter(phase)}
-                  className="capitalize text-xs"
-                >
-                  {phase}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Status Filter */}
-          <div className="flex flex-wrap gap-1">
-            {statuses.map((status) => (
-              <Button
-                key={status}
-                variant={statusFilter === status ? "secondary" : "ghost"}
-                size="sm"
-                onClick={() => setStatusFilter(status)}
-                className="capitalize text-xs"
-              >
-                {status}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Process Cards */}
+        {/* Group Cards */}
         <div className="grid gap-6">
-          <AnimatePresence mode="popLayout">
-            {filteredProcesses.map((process, index) => (
-              <ProcessCard
-                key={process.id}
-                process={process}
-                index={index}
-                isExpanded={expandedId === process.id}
-                onToggle={() => setExpandedId(expandedId === process.id ? null : process.id)}
-              />
-            ))}
-          </AnimatePresence>
+          {experimentGroups.map((group, index) => (
+            <GroupCard
+              key={group.id}
+              group={group}
+              index={index}
+              isExpanded={expandedId === group.id}
+              onToggle={() =>
+                setExpandedId(expandedId === group.id ? null : group.id)
+              }
+            />
+          ))}
         </div>
 
-        {filteredProcesses.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">No se encontraron procesos con los filtros seleccionados.</p>
-          </div>
-        )}
-
-        {/* Add Process Button */}
+        {/* Comparative Conclusion */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-8 text-center"
+          className="mt-8 p-6 bg-primary/5 rounded-xl border border-primary/20 flex items-start gap-4"
         >
-          <Button
-            variant="outline"
-            size="lg"
-            className="border-dashed border-2 border-primary/30 hover:border-primary hover:bg-primary/5"
-          >
-            <Plus className="mr-2 h-5 w-5" />
-            Agregar Nuevo Proceso
-          </Button>
+          <FlaskConical className="h-6 w-6 text-primary shrink-0 mt-0.5" />
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            <span className="font-medium text-foreground">Hallazgo central:</span> el agua con azúcar
+            no retrasó la germinación, la eliminó por completo. El grupo control promedió 2.45 cm al
+            día 26; el experimental marcó 0.00 cm en las 20 muestras, con 100% de cobertura de moho.
+          </p>
         </motion.div>
       </div>
     </section>
   );
 }
 
-function ProcessCard({
-  process,
+function GroupCard({
+  group,
   index,
   isExpanded,
   onToggle,
 }: {
-  process: GerminationProcess;
+  group: ExperimentGroup;
   index: number;
   isExpanded: boolean;
   onToggle: () => void;
 }) {
+  const isControl = group.id === "control";
+
+  // Combinar evolución de crecimiento y moho para este grupo en una sola serie
+  const chartData = growthEvolution.map((point, i) => ({
+    day: point.day,
+    crecimiento: isControl ? point.control : point.experimental,
+    moho: isControl ? moldProgression[i].control : moldProgression[i].experimental,
+  }));
+
   return (
     <motion.div
-      layout
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
     >
       <Card className="overflow-hidden border-border/50 hover:border-primary/30 transition-colors">
@@ -171,28 +118,32 @@ function ProcessCard({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${phaseColors[process.phase]}`}>
-                  {process.phase}
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                    isControl
+                      ? "bg-primary/20 text-primary"
+                      : "bg-destructive/15 text-destructive"
+                  }`}
+                >
+                  {group.treatment}
                 </span>
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${statusColors[process.status]}`}>
-                  {process.status}
+                <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                  {group.total} semillas
                 </span>
               </div>
-              <CardTitle className="text-lg text-card-foreground">{process.title}</CardTitle>
-              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{process.description}</p>
+              <CardTitle className="text-lg text-card-foreground">{group.name}</CardTitle>
+              <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{group.description}</p>
             </div>
-            
+
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                <Calendar className="h-4 w-4" />
-                <span>{new Date(process.startDate).toLocaleDateString("es-ES")}</span>
+              <div className="text-right">
+                <p className={`text-2xl font-bold ${isControl ? "text-primary" : "text-destructive"}`}>
+                  {group.germinationRate}%
+                </p>
+                <p className="text-xs text-muted-foreground">germinación</p>
               </div>
               <Button variant="ghost" size="icon">
-                {isExpanded ? (
-                  <ChevronUp className="h-5 w-5" />
-                ) : (
-                  <ChevronDown className="h-5 w-5" />
-                )}
+                {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
               </Button>
             </div>
           </div>
@@ -210,80 +161,76 @@ function ProcessCard({
                 <div className="pt-6 grid lg:grid-cols-2 gap-6">
                   {/* Metrics */}
                   <div className="space-y-4">
-                    <h4 className="font-medium text-card-foreground">Métricas Actuales</h4>
+                    <h4 className="font-medium text-card-foreground">Resultados al día 26</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <MetricCard
-                        icon={<Thermometer className="h-4 w-4" />}
-                        label="Temperatura"
-                        value={`${process.metrics.temperature}°C`}
-                        color="text-chart-4"
-                      />
-                      <MetricCard
-                        icon={<Droplets className="h-4 w-4" />}
-                        label="Humedad"
-                        value={`${process.metrics.humidity}%`}
-                        color="text-chart-2"
-                      />
-                      <MetricCard
-                        icon={<Leaf className="h-4 w-4" />}
-                        label="Absorción Nutrientes"
-                        value={`${process.metrics.nutrientAbsorption}%`}
+                        icon={<Sprout className="h-4 w-4" />}
+                        label="Semillas germinadas"
+                        value={`${group.germinated} de ${group.total}`}
                         color="text-primary"
                       />
                       <MetricCard
-                        icon={<Sun className="h-4 w-4" />}
-                        label="Eficiencia Fotosíntesis"
-                        value={`${process.metrics.photosyntheticEfficiency}%`}
+                        icon={<Ruler className="h-4 w-4" />}
+                        label="Crecimiento promedio"
+                        value={`${group.avgGrowth.toFixed(2)} cm`}
                         color="text-secondary"
                       />
                       <MetricCard
-                        icon={<TrendingUp className="h-4 w-4" />}
-                        label="Crecimiento Raíz"
-                        value={`${process.metrics.rootGrowth}%`}
-                        color="text-accent"
+                        icon={<Bug className="h-4 w-4" />}
+                        label="Cobertura de moho"
+                        value={`${group.finalMold}%`}
+                        color="text-destructive"
+                      />
+                      <MetricCard
+                        icon={<Droplets className="h-4 w-4" />}
+                        label="Tipo de riego"
+                        value={isControl ? "Agua pura" : "Sacarosa"}
+                        color="text-chart-2"
                       />
                     </div>
-                    
-                    {process.notes && (
-                      <div className="mt-4 p-3 bg-muted rounded-lg">
-                        <p className="text-sm text-muted-foreground">
-                          <span className="font-medium text-foreground">Notas:</span> {process.notes}
-                        </p>
-                      </div>
-                    )}
+
+                    <div className="mt-4 p-3 bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground">
+                        <span className="font-medium text-foreground">Observación:</span> {group.notes}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Chart */}
                   <div>
-                    <h4 className="font-medium text-card-foreground mb-4">Evolución del Proceso</h4>
+                    <h4 className="font-medium text-card-foreground mb-4">
+                      Crecimiento (cm) y moho (%) a lo largo del tiempo
+                    </h4>
                     <div className="h-64 bg-muted/50 rounded-lg p-4">
                       <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={process.chartData}>
+                        <LineChart data={chartData}>
                           <CartesianGrid strokeDasharray="3 3" stroke="currentColor" opacity={0.1} />
                           <XAxis dataKey="day" tick={{ fontSize: 12 }} stroke="currentColor" opacity={0.5} />
                           <YAxis tick={{ fontSize: 12 }} stroke="currentColor" opacity={0.5} />
                           <Tooltip
                             contentStyle={{
-                              backgroundColor: "hsl(var(--card))",
-                              border: "1px solid hsl(var(--border))",
+                              backgroundColor: "var(--card)",
+                              border: "1px solid var(--border)",
                               borderRadius: "8px",
                             }}
                           />
+                          <Legend wrapperStyle={{ fontSize: 12 }} />
                           <Line
                             type="monotone"
-                            dataKey="nutrientAbsorption"
-                            stroke="hsl(var(--primary))"
+                            dataKey="crecimiento"
+                            stroke="var(--primary)"
                             strokeWidth={2}
-                            dot={{ fill: "hsl(var(--primary))" }}
-                            name="Nutrientes"
+                            dot={{ fill: "var(--primary)" }}
+                            name="Crecimiento (cm)"
                           />
                           <Line
                             type="monotone"
-                            dataKey="efficiency"
-                            stroke="hsl(var(--secondary))"
+                            dataKey="moho"
+                            stroke="var(--destructive)"
                             strokeWidth={2}
-                            dot={{ fill: "hsl(var(--secondary))" }}
-                            name="Eficiencia"
+                            strokeDasharray="5 5"
+                            dot={{ fill: "var(--destructive)" }}
+                            name="Moho (%)"
                           />
                         </LineChart>
                       </ResponsiveContainer>

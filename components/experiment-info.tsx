@@ -1,38 +1,43 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FlaskConical, Target, Microscope, Cpu, Leaf, Droplets, Thermometer, Sun } from "lucide-react";
+import { Beaker, Droplets, Ruler, Bug, Thermometer, CheckCircle2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { projectInfo, hypotheses, mechanisms, type Hypothesis } from "@/lib/data";
 
-const objectives = [
+// Operacionalización de variables (Tabla 2.3.1)
+const variables = [
   {
-    icon: <FlaskConical className="h-6 w-6" />,
-    title: "Análisis de Germinación",
-    description: "Estudio detallado de los procesos de germinación bajo condiciones controladas.",
+    icon: <Droplets className="h-5 w-5" />,
+    type: "Independiente",
+    label: "Tipo de riego",
+    indicator: "Agua pura / Solución saturada de sacarosa",
   },
   {
-    icon: <Target className="h-6 w-6" />,
-    title: "Optimización de Rendimiento",
-    description: "Maximizar la eficiencia en el crecimiento y absorción de nutrientes.",
+    icon: <Ruler className="h-5 w-5" />,
+    type: "Dependiente",
+    label: "Crecimiento vegetal",
+    indicator: "Longitud del tallo en cm (regla milimétrica)",
   },
   {
-    icon: <Microscope className="h-6 w-6" />,
-    title: "Investigación Sostenible",
-    description: "Desarrollo de metodologías de cultivo respetuosas con el medio ambiente.",
+    icon: <Bug className="h-5 w-5" />,
+    type: "Dependiente",
+    label: "Salud fitosanitaria",
+    indicator: "Presencia y % de moho (observación visual)",
   },
   {
-    icon: <Cpu className="h-6 w-6" />,
-    title: "Automatización Inteligente",
-    description: "Implementación de sistemas de monitoreo y control automatizado.",
+    icon: <Thermometer className="h-5 w-5" />,
+    type: "Controlada",
+    label: "Condiciones ambientales",
+    indicator: "Temperatura 18–24 °C y luz constantes",
   },
 ];
 
-const technicalSpecs = [
-  { icon: <Leaf className="h-5 w-5" />, label: "Sensor de Nutrientes", spec: "Root Zone Sensor Array v2.1" },
-  { icon: <Droplets className="h-5 w-5" />, label: "Monitor de Humedad", spec: "Nutrient Intake Probe 360°" },
-  { icon: <Thermometer className="h-5 w-5" />, label: "Control Térmico", spec: "Bio-data Entry Base ±0.1°C" },
-  { icon: <Sun className="h-5 w-5" />, label: "Sistema de Iluminación", spec: "LED Grow Light 400-700nm" },
-];
+const resultBadge: Record<Hypothesis["result"], string> = {
+  COMPROBADA: "bg-secondary/20 text-secondary-foreground",
+  "NO RECHAZADA": "bg-muted text-muted-foreground",
+  RESPALDADA: "bg-primary/15 text-primary",
+};
 
 export function ExperimentInfo() {
   return (
@@ -46,15 +51,16 @@ export function ExperimentInfo() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
-            Información del <span className="text-primary">Experimento</span>
+            Metodología del <span className="text-primary">Experimento</span>
           </h2>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Detalles sobre el proyecto de investigación, objetivos y especificaciones técnicas.
+            Diseño experimental, variables, hipótesis y los mecanismos bioquímicos que
+            explican los resultados.
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Project Description */}
+          {/* Descripción + Diseño */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -63,40 +69,48 @@ export function ExperimentInfo() {
             <h3 className="text-2xl font-bold text-foreground mb-4">Descripción del Proyecto</h3>
             <div className="prose prose-sm max-w-none">
               <p className="text-muted-foreground leading-relaxed mb-4">
-                BioGrow Partners es un proyecto de investigación enfocado en el estudio y 
-                optimización de procesos de germinación vegetal. Utilizamos tecnología de 
-                sensores avanzada para monitorear en tiempo real las condiciones de cultivo 
-                y el desarrollo de las plantas.
+                Investigación cuantitativa experimental que evalúa el efecto del riego con agua
+                azucarada sobre la germinación del frijol común
+                <span className="italic"> (Phaseolus vulgaris)</span>. Surge de una creencia popular
+                muy extendida en {projectInfo.location}: que el azúcar ayuda a las plantas a crecer.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Nuestro sistema integrado permite el seguimiento preciso de variables críticas 
-                como temperatura, humedad, absorción de nutrientes y eficiencia fotosintética, 
-                proporcionando datos valiosos para la investigación agrícola sostenible.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                El proyecto combina metodologías científicas tradicionales con innovaciones 
-                tecnológicas para desarrollar soluciones de cultivo más eficientes y 
-                respetuosas con el medio ambiente.
+                Se usó un diseño de dos grupos paralelos independientes de {projectInfo.groupSize}{" "}
+                semillas cada uno, del mismo lote comercial, sobre sustrato de algodón absorbente.
+                La única variable manipulada fue el tipo de riego.
               </p>
             </div>
 
-            {/* Technical Specs */}
+            {/* Parámetros del diseño */}
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <SpecCard label="Muestra total" value={`${projectInfo.totalSeeds} semillas`} />
+              <SpecCard label="Duración" value={`${projectInfo.durationDays} días`} />
+              <SpecCard label="Concentración" value={projectInfo.sucroseConcentration} />
+              <SpecCard label="Presupuesto" value={projectInfo.budget} />
+            </div>
+
+            {/* Variables */}
             <div className="mt-8">
-              <h4 className="font-semibold text-foreground mb-4">Especificaciones Técnicas</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {technicalSpecs.map((spec, index) => (
+              <h4 className="font-semibold text-foreground mb-4">Operacionalización de Variables</h4>
+              <div className="grid grid-cols-1 gap-3">
+                {variables.map((v, index) => (
                   <motion.div
-                    key={spec.label}
+                    key={v.label}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
                     className="flex items-start gap-3 p-3 bg-card rounded-lg border border-border"
                   >
-                    <div className="text-primary">{spec.icon}</div>
-                    <div>
-                      <p className="text-sm font-medium text-card-foreground">{spec.label}</p>
-                      <p className="text-xs text-muted-foreground">{spec.spec}</p>
+                    <div className="text-primary mt-0.5">{v.icon}</div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium text-card-foreground">{v.label}</p>
+                        <span className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                          {v.type}
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{v.indicator}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -104,17 +118,17 @@ export function ExperimentInfo() {
             </div>
           </motion.div>
 
-          {/* Objectives */}
+          {/* Hipótesis + Mecanismos */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold text-foreground mb-4">Objetivos de Investigación</h3>
+            <h3 className="text-2xl font-bold text-foreground mb-4">Hipótesis</h3>
             <div className="grid gap-4">
-              {objectives.map((objective, index) => (
+              {hypotheses.map((h, index) => (
                 <motion.div
-                  key={objective.title}
+                  key={h.code}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -122,46 +136,50 @@ export function ExperimentInfo() {
                 >
                   <Card className="hover:border-primary/30 transition-colors">
                     <CardContent className="p-4">
-                      <div className="flex items-start gap-4">
-                        <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                          {objective.icon}
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-card-foreground">{objective.title}</h4>
-                          <p className="text-sm text-muted-foreground mt-1">{objective.description}</p>
-                        </div>
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold text-card-foreground">
+                          {h.code} — {h.name}
+                        </h4>
+                        <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${resultBadge[h.result]}`}>
+                          {h.result}
+                        </span>
                       </div>
+                      <p className="text-sm text-muted-foreground">{h.statement}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
               ))}
             </div>
 
-            {/* Methodology */}
+            {/* Mecanismos bioquímicos */}
             <div className="mt-8 p-6 bg-primary/5 rounded-xl border border-primary/20">
-              <h4 className="font-semibold text-foreground mb-3">Metodología</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2" />
-                  Monitoreo continuo 24/7 con sensores de alta precisión
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2" />
-                  Registro y análisis de datos en tiempo real
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2" />
-                  Control automatizado de condiciones ambientales
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2" />
-                  Comparación entre diferentes variedades y tratamientos
-                </li>
+              <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                <Beaker className="h-5 w-5 text-primary" />
+                Mecanismos Bioquímicos
+              </h4>
+              <ul className="space-y-3 text-sm">
+                {mechanisms.map((m) => (
+                  <li key={m.title} className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                    <span className="text-muted-foreground">
+                      <span className="font-medium text-foreground">{m.title}:</span> {m.description}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
           </motion.div>
         </div>
       </div>
     </section>
+  );
+}
+
+function SpecCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="p-3 bg-card rounded-lg border border-border">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="text-sm font-semibold text-card-foreground">{value}</p>
+    </div>
   );
 }
