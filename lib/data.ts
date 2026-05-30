@@ -15,6 +15,7 @@ export const projectInfo = {
   brandName: "BioGrow Partners",
   brandTagline: "Soluciones de Cultivo Sostenible",
   logoSrc: "/images/logo-oficial-proyecto.png",
+  teamPhotoSrc: "/images/foto_grupal.png",
   university: "Universidad Mariano Gálvez de Guatemala",
   faculty: "Facultad de Ciencias y Tecnología",
   course: "Metodología de la Investigación",
